@@ -36,7 +36,7 @@ export default function App() {
   });
   const [bookingSuccess, setBookingSuccess] = useState(false);
 
-  // FLOTA OFICIAL COMPLETA DE VIP CAR HUANCAYO (IMÁGENES CORREGIDAS AL 100%)
+  // FLOTA OFICIAL CON LAS IMÁGENES EXACTAS DE VIP CAR HUANCAYO
   const vehiclesCatalog = [
     // 1. CAMIONETAS Y SUVS
     {
@@ -49,7 +49,7 @@ export default function App() {
       ac: 'A/C',
       baseRate: 290,
       image: 'https://images.unsplash.com/photo-1559416523-140ddc3d238c?auto=format&fit=crop&w=800&q=80',
-      description: 'Pick-up 4x4 doble cabina homologada con estándar minero (jaula interna, pértiga y circulina).',
+      description: 'Doble cabina homologada con estándar minero (jaula interna, pértiga y circulina).',
       tag: 'Más Solicitada'
     },
     {
@@ -61,7 +61,7 @@ export default function App() {
       traction: '4x4',
       ac: 'A/C',
       baseRate: 350,
-      image: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=800&q=80',
+      image: 'https://vipcarhuancayo.com/wp-content/uploads/2021/08/fortuner-4x4-1.jpg',
       description: 'SUV cerrada todoterreno de lujo para directores, supervisores y viajes familiares al Valle del Mantaro.',
       tag: 'Alta Gama'
     },
@@ -74,7 +74,7 @@ export default function App() {
       traction: '4x4',
       ac: 'A/C',
       baseRate: 380,
-      image: 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&w=800&q=80',
+      image: 'https://vipcarhuancayo.com/wp-content/uploads/2021/08/land-cruiser-prado.jpg',
       description: 'Máximo confort y potencia todoterreno para viajes de larga distancia y trochas de altura.',
       tag: 'Ejecutiva'
     },
@@ -89,22 +89,22 @@ export default function App() {
       traction: '4x2',
       ac: 'A/C',
       baseRate: 360,
-      image: 'https://images.unsplash.com/photo-1527786356703-4b100091cd2c?auto=format&fit=crop&w=800&q=80',
+      image: 'https://vipcarhuancayo.com/wp-content/uploads/2021/10/toyota-hiace.jpg',
       description: 'Van ejecutiva para traslados hacia el Aeropuerto Francisco Carlé de Jauja y delegaciones.',
       tag: 'Traslados Aeropuerto'
     },
     {
       id: 'coaster',
-      name: 'Minibús Toyota Coaster',
+      name: 'Coaster',
       category: 'buses',
       seats: '33 pasajeros',
       transmission: 'Mecánico',
       traction: '4x2',
       ac: 'A/C',
       baseRate: 550,
-      image: 'https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=800&q=80',
+      image: 'https://vipcarhuancayo.com/wp-content/uploads/2021/08/coaster-30-p.jpg',
       description: 'Minibús Coaster para movilidad de personal, delegaciones y turismo regional en Junín.',
-      tag: 'Personal'
+      tag: '33 Pasajeros'
     },
     {
       id: 'omnibus',
@@ -115,8 +115,8 @@ export default function App() {
       traction: '4x2',
       ac: 'A/C Climatizado',
       baseRate: 850,
-      image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80',
-      description: 'Transporte de personal interprovincial Huancayo - Lima y viajes de comitivas de gran escala.',
+      image: 'https://vipcarhuancayo.com/wp-content/uploads/2025/01/bus01.jpg',
+      description: 'Transporte de personal interprovincial Huancayo - Lima y comitivas de gran escala.',
       tag: 'Gran Capacidad'
     },
 
@@ -130,8 +130,8 @@ export default function App() {
       traction: '4x2',
       ac: 'A/C',
       baseRate: 480,
-      image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80',
-      description: 'Camión rígido con carrocería de baranda alta para traslado seguro de cuadrillas a obra.',
+      image: 'https://vipcarhuancayo.com/wp-content/uploads/2025/01/camion02.jpg',
+      description: 'Camión con carrocería de baranda alta para traslado seguro de cuadrillas a obra.',
       tag: 'Operativo'
     },
     {
@@ -143,8 +143,8 @@ export default function App() {
       traction: '4x2',
       ac: 'A/C',
       baseRate: 520,
-      image: 'https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&w=800&q=80',
-      description: 'Furgón de carga cerrado para transporte de repuestos, materiales y logística protegida.',
+      image: 'https://vipcarhuancayo.com/wp-content/uploads/2025/01/camion01.jpg',
+      description: 'Furgón cerrado de aluminio para encomiendas, logística segura y carga pesada protegida.',
       tag: 'Carga 5TN'
     },
     {
@@ -156,7 +156,7 @@ export default function App() {
       traction: '4x2 / 6x4',
       ac: 'A/C',
       baseRate: 750,
-      image: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=800&q=80',
+      image: 'https://vipcarhuancayo.com/wp-content/uploads/2025/01/cisterna.jpg',
       description: 'Camión tanque cisterna para abastecimiento de agua o combustible en campamentos mineros.',
       tag: 'Especializado'
     },
@@ -231,14 +231,14 @@ export default function App() {
 
       if (marketingPlatform === 'tiktok') {
         title = `🎬 Guion Viral para TikTok / Reels: ${marketingPrompt || 'Flota Completa VIP CAR Huancayo'}`;
-        hook = `💥 [Segundo 0-3]: "¿Buscabas camioneta 4x4, Van de 17 pasajeros o camión cisterna en Huancayo para tu obra? ¡Mira lo que tenemos listo!"`;
-        body = `🚗 [Segundo 4-15]: Muestra tomas rápidas de la Toyota Hilux, Fortuner, Prado, Minivan Hiace y Camión Cisterna. "En VIP CAR Huancayo tenemos desde Coasters de 33 pasajeros hasta camiones cisterna con equipamiento minero homologado."\n\n📍 [Segundo 16-25]: "Recuerda que todas las reservas se hacen con 24 a 48 horas de anticipación. Entregamos en Urb. La Merced o en el Aeropuerto de Jauja. Aceptamos facturas BCP/BBVA y tarjetas."`;
+        hook = `💥 [Segundo 0-3]: "¿Buscabas camioneta 4x4, Coaster de 33 asientos o camión cisterna en Huancayo para tu obra? ¡Mira lo que tenemos listo!"`;
+        body = `🚗 [Segundo 4-15]: Muestra tomas de la Toyota Hilux, Fortuner, Prado, Minivan Hiace, Coaster y Camión Cisterna. "En VIP CAR Huancayo tenemos desde Coasters de 33 pasajeros hasta camiones cisterna con equipamiento minero homologado."\n\n📍 [Segundo 16-25]: "Recuerda que todas las reservas se hacen con 24 a 48 horas de anticipación. Entregamos en Urb. La Merced o en el Aeropuerto de Jauja. Aceptamos facturas BCP/BBVA y tarjetas."`;
         cta = `👉 [Segundo 26-30]: "Toca el enlace de nuestro perfil o escribe al WhatsApp 999 461 414 para cotizar tu unidad."`;
-        tags = `#Huancayo #AlquilerDeAutosHuancayo #ToyotaHilux #Fortuner #ToyotaHiace #CamionCisterna #VipCarHuancayo`;
+        tags = `#Huancayo #AlquilerDeAutosHuancayo #ToyotaHilux #Fortuner #ToyotaHiace #Coaster #CamionCisterna #VipCarHuancayo`;
       } else if (marketingPlatform === 'facebook') {
         title = `📢 Copy Publicitario para Facebook & Instagram Ads: Campaña B2B y Minería`;
         hook = `🚜 FLOTA PESADA, BUSES Y CAMIONETAS 4X4 PARA EMPRESAS Y CONTRATISTAS EN JUNÍN`;
-        body = `¿Tu proyecto minero o vial en la sierra central necesita vehículos confiables?\n\nEn VIP CAR HUANCAYO ponemos a tu disposición:\n• Toyota Hilux 4x4, Fortuner y Land Cruiser Prado con estándar minero (pértiga y jaula).\n• Vans Toyota Hiace (17p), Minibuses Coaster (33p) y Ómnibus (46p).\n• Camiones furgón cerrado de 5TN y Camiones Cisterna.\n\n✅ Monitoreo Satelital GPS 24/7 y Seguro Total.\n✅ Conductores con examen psicosensométrico y manejo defensivo.\n⚠️ Reserva tu unidad con mínimo 24 a 48 horas de anticipación para habilitación técnica.`;
+        body = `¿Tu proyecto minero o vial en la sierra central necesita vehículos confiables?\n\nEn VIP CAR HUANCAYO ponemos a tu disposición:\n• Toyota Hilux 4x4, Fortuner y Land Cruiser Prado con estándar minero (pértiga y jaula).\n• Vans Toyota Hiace (17p), Coasters (33p) y Ómnibus (46p).\n• Camiones furgón cerrado de 5TN y Camiones Cisterna.\n\n✅ Monitoreo Satelital GPS 24/7 y Seguro Total.\n✅ Conductores con examen psicosensométrico y manejo defensivo.\n⚠️ Reserva tu unidad con mínimo 24 a 48 horas de anticipación para habilitación técnica.`;
         cta = `📲 ¡Cotiza hoy mismo al WhatsApp 999 461 414 o visita nuestras oficinas en Av. Manuel Traverso 597, Urb. La Merced!`;
         tags = `Segmentación recomendada: Huancayo, Concepción, Tarma, Chanchamayo, La Oroya, Pasco.`;
       } else if (marketingPlatform === 'whatsapp') {
@@ -250,7 +250,7 @@ export default function App() {
       } else {
         title = `🏢 Licitación / Propuesta Formal B2B para Minería y Transporte Industrial`;
         hook = `Asunto: Propuesta Técnica y Económica de Renta de Flota Pesada y Liviana - VIP CAR EIRL`;
-        body = `A la atención de la Gerencia de Operaciones y Logística:\n\nPresentamos formalmente nuestro portafolio de vehículos para faenas en Junín, Pasco y Huancavelica:\n\n1. LÍNEA CAMIONETAS: Toyota Hilux 4x4, Fortuner y Land Cruiser Prado certificadas para altura.\n2. LÍNEA TRANSPORTE DE PERSONAL: Vans Hiace (17p), Coaster (33p) y Buses Interurbanos de 46 pasajeros con cinturones de 3 puntos y botiquín reglamentario.\n3. LÍNEA LOGÍSTICA PESADA: Camiones de traslado de cuadrillas, furgones de 5TN y Camiones Cisterna homologados.\n\n*Condiciones Operativas:*\n- Plazo de reserva técnica: Mínimo 48 horas.\n- Formas de pago: Transferencias CCI corporativas con crédito a 15 y 30 días según calificación.`;
+        body = `A la atención de la Gerencia de Operaciones y Logística:\n\nPresentamos formalmente nuestro portafolio de vehículos para faenas en Junín, Pasco y Huancavelica:\n\n1. LÍNEA CAMIONETAS: Toyota Hilux 4x4, Fortuner y Land Cruiser Prado certificadas para altura.\n2. LÍNEA TRANSPORTE DE PERSONAL: Vans Hiace (17p), Coasters (33p) y Buses Interurbanos de 46 pasajeros con cinturones de 3 puntos y botiquín reglamentario.\n3. LÍNEA LOGÍSTICA PESADA: Camiones de traslado de cuadrillas, furgones de 5TN y Camiones Cisterna homologados.\n\n*Condiciones Operativas:*\n- Plazo de reserva técnica: Mínimo 48 horas.\n- Formas de pago: Transferencias CCI corporativas con crédito a 15 y 30 días según calificación.`;
         cta = `Contacto institucional directo: 999 461 414 / reservas@vipcarhuancayo.com`;
         tags = `Adjuntar: Dossier fotográfico con Fichas Técnicas MTC.`;
       }
@@ -345,7 +345,7 @@ export default function App() {
               </h1>
               
               <p className="mt-5 text-base sm:text-lg text-neutral-300 max-w-2xl mx-auto">
-                Alquiler de Toyota Hilux, Fortuner, Prado, Vans Hiace, Minibuses Coaster, Ómnibus de 46p y Camiones de carga con o sin conductor. Cobertura en toda la región Junín y la sierra central.
+                Alquiler de Toyota Hilux, Fortuner, Prado, Vans Hiace, Coaster, Ómnibus de 46p y Camiones de carga con o sin conductor. Cobertura en toda la región Junín y la sierra central.
               </p>
 
               <div className="mt-8 flex flex-wrap justify-center gap-4">
@@ -428,7 +428,7 @@ export default function App() {
               ))}
             </div>
 
-            {/* Grid de Vehículos con Imágenes Corregidas */}
+            {/* Grid de Vehículos */}
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredVehicles.map((car) => (
                 <div 
@@ -436,11 +436,11 @@ export default function App() {
                   className="bg-neutral-900/80 border border-neutral-800 rounded-3xl overflow-hidden hover:border-red-600/60 transition group flex flex-col justify-between"
                 >
                   <div>
-                    <div className="relative h-52 overflow-hidden bg-neutral-950">
+                    <div className="relative h-52 overflow-hidden bg-neutral-950 flex items-center justify-center">
                       <img 
                         src={car.image} 
                         alt={car.name} 
-                        className="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-90"
+                        className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent" />
                       <span className="absolute top-3 right-3 bg-red-600 text-white text-[10px] font-black uppercase px-2.5 py-1 rounded-full shadow-md">
@@ -1077,7 +1077,7 @@ export default function App() {
                 <div className="flex flex-wrap gap-2">
                   <button
                     onClick={() => {
-                      setMarketingPrompt('Promocionar camionetas 4x4, buses Coaster y camiones para obras mineras');
+                      setMarketingPrompt('Promocionar camionetas 4x4, Coaster y camiones para obras mineras');
                       setMarketingPlatform('facebook');
                     }}
                     className="text-xs bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 text-neutral-200 px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition"
@@ -1086,7 +1086,7 @@ export default function App() {
                   </button>
                   <button
                     onClick={() => {
-                      setMarketingPrompt('Viajes de promoción y turismo en Minivans Hiace y Coaster');
+                      setMarketingPrompt('Viajes de turismo y delegaciones en Coaster y Minivan Hiace');
                       setMarketingPlatform('tiktok');
                     }}
                     className="text-xs bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 text-neutral-200 px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition"
@@ -1134,7 +1134,7 @@ export default function App() {
                       </label>
                       <textarea
                         rows={4}
-                        placeholder="Ej. Promocionar la nueva flota de Coaster y camiones cisterna con reserva de 48h y facilidades de facturación..."
+                        placeholder="Ej. Promocionar la flota de Coaster y camiones cisterna con reserva de 48h y facilidades de facturación..."
                         value={marketingPrompt}
                         onChange={(e) => setMarketingPrompt(e.target.value)}
                         className="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-3 text-xs focus:outline-none focus:border-red-500 text-white resize-none"
