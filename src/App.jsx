@@ -36,9 +36,9 @@ export default function App() {
   });
   const [bookingSuccess, setBookingSuccess] = useState(false);
 
-  // FLOTA OFICIAL COMPLETA DE VIP CAR HUANCAYO CON IMÁGENES CORREGIDAS
+  // FLOTA OFICIAL COMPLETA DE VIP CAR HUANCAYO (IMÁGENES CORREGIDAS AL 100%)
   const vehiclesCatalog = [
-    // CAMIONETAS Y SUVS
+    // 1. CAMIONETAS Y SUVS
     {
       id: 'hilux',
       name: 'Camioneta Toyota Hilux 4x4',
@@ -49,7 +49,7 @@ export default function App() {
       ac: 'A/C',
       baseRate: 290,
       image: 'https://images.unsplash.com/photo-1559416523-140ddc3d238c?auto=format&fit=crop&w=800&q=80',
-      description: 'Doble cabina homologada con estándar minero (jaula interna, pértiga y circulina).',
+      description: 'Pick-up 4x4 doble cabina homologada con estándar minero (jaula interna, pértiga y circulina).',
       tag: 'Más Solicitada'
     },
     {
@@ -61,8 +61,8 @@ export default function App() {
       traction: '4x4',
       ac: 'A/C',
       baseRate: 350,
-      image: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80',
-      description: 'SUV de lujo para directores, supervisores y viajes familiares al Valle del Mantaro.',
+      image: 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=800&q=80',
+      description: 'SUV cerrada todoterreno de lujo para directores, supervisores y viajes familiares al Valle del Mantaro.',
       tag: 'Alta Gama'
     },
     {
@@ -75,11 +75,11 @@ export default function App() {
       ac: 'A/C',
       baseRate: 380,
       image: 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&w=800&q=80',
-      description: 'Máximo confort y potencia todoterreno para viajes de larga distancia y trochas exigentes.',
+      description: 'Máximo confort y potencia todoterreno para viajes de larga distancia y trochas de altura.',
       tag: 'Ejecutiva'
     },
 
-    // BUSES Y VANS
+    // 2. BUSES Y VANS
     {
       id: 'hiace',
       name: 'Minivan Toyota Hiace',
@@ -89,8 +89,8 @@ export default function App() {
       traction: '4x2',
       ac: 'A/C',
       baseRate: 360,
-      image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80',
-      description: 'Traslado express al Aeropuerto de Jauja, Selva Central y comitivas institucionales.',
+      image: 'https://images.unsplash.com/photo-1527786356703-4b100091cd2c?auto=format&fit=crop&w=800&q=80',
+      description: 'Van ejecutiva para traslados hacia el Aeropuerto Francisco Carlé de Jauja y delegaciones.',
       tag: 'Traslados Aeropuerto'
     },
     {
@@ -103,7 +103,7 @@ export default function App() {
       ac: 'A/C',
       baseRate: 550,
       image: 'https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=800&q=80',
-      description: 'Movilidad de cuadrillas de personal, delegaciones y turismo regional en Junín.',
+      description: 'Minibús Coaster para movilidad de personal, delegaciones y turismo regional en Junín.',
       tag: 'Personal'
     },
     {
@@ -116,11 +116,11 @@ export default function App() {
       ac: 'A/C Climatizado',
       baseRate: 850,
       image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80',
-      description: 'Transporte interprovincial Huancayo - Lima, eventos corporativos y viajes de gran escala.',
+      description: 'Transporte de personal interprovincial Huancayo - Lima y viajes de comitivas de gran escala.',
       tag: 'Gran Capacidad'
     },
 
-    // CAMIONES DE OPERACIÓN Y CARGA
+    // 3. CAMIONES DE OPERACIÓN Y CARGA
     {
       id: 'camion-personal',
       name: 'Camión para Traslado de Personal',
@@ -131,7 +131,7 @@ export default function App() {
       ac: 'A/C',
       baseRate: 480,
       image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80',
-      description: 'Camión con carrocería de baranda acondicionada para cuadrillas de campo en sectores viales y agrícolas.',
+      description: 'Camión rígido con carrocería de baranda alta para traslado seguro de cuadrillas a obra.',
       tag: 'Operativo'
     },
     {
@@ -144,7 +144,7 @@ export default function App() {
       ac: 'A/C',
       baseRate: 520,
       image: 'https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&w=800&q=80',
-      description: 'Furgón cerrado de aluminio para encomiendas, logística segura y carga pesada protegida.',
+      description: 'Furgón de carga cerrado para transporte de repuestos, materiales y logística protegida.',
       tag: 'Carga 5TN'
     },
     {
@@ -157,7 +157,7 @@ export default function App() {
       ac: 'A/C',
       baseRate: 750,
       image: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=800&q=80',
-      description: 'Abastecimiento de agua potable o combustible para proyectos de construcción, carreteras y campamentos en la sierra.',
+      description: 'Camión tanque cisterna para abastecimiento de agua o combustible en campamentos mineros.',
       tag: 'Especializado'
     },
   ];
@@ -232,7 +232,7 @@ export default function App() {
       if (marketingPlatform === 'tiktok') {
         title = `🎬 Guion Viral para TikTok / Reels: ${marketingPrompt || 'Flota Completa VIP CAR Huancayo'}`;
         hook = `💥 [Segundo 0-3]: "¿Buscabas camioneta 4x4, Van de 17 pasajeros o camión cisterna en Huancayo para tu obra? ¡Mira lo que tenemos listo!"`;
-        body = `🚗 [Segundo 4-15]: Muestra tomas rápidas de la Toyota Hilux, Fortuner, Prado, Minivan Hiace y Camión Cisterna. "En VIP CAR Huancayo no solo alquilamos camionetas; tenemos desde Coasters de 33 pasajeros hasta camiones de carga de 5 toneladas con equipamiento minero homologado."\n\n📍 [Segundo 16-25]: "Recuerda que todas las reservas se hacen con 24 a 48 horas de anticipación. Entregamos en Urb. La Merced o en el Aeropuerto de Jauja. Aceptamos facturas BCP/BBVA y tarjetas."`;
+        body = `🚗 [Segundo 4-15]: Muestra tomas rápidas de la Toyota Hilux, Fortuner, Prado, Minivan Hiace y Camión Cisterna. "En VIP CAR Huancayo tenemos desde Coasters de 33 pasajeros hasta camiones cisterna con equipamiento minero homologado."\n\n📍 [Segundo 16-25]: "Recuerda que todas las reservas se hacen con 24 a 48 horas de anticipación. Entregamos en Urb. La Merced o en el Aeropuerto de Jauja. Aceptamos facturas BCP/BBVA y tarjetas."`;
         cta = `👉 [Segundo 26-30]: "Toca el enlace de nuestro perfil o escribe al WhatsApp 999 461 414 para cotizar tu unidad."`;
         tags = `#Huancayo #AlquilerDeAutosHuancayo #ToyotaHilux #Fortuner #ToyotaHiace #CamionCisterna #VipCarHuancayo`;
       } else if (marketingPlatform === 'facebook') {
@@ -428,7 +428,7 @@ export default function App() {
               ))}
             </div>
 
-            {/* Grid de Vehículos */}
+            {/* Grid de Vehículos con Imágenes Corregidas */}
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredVehicles.map((car) => (
                 <div 
