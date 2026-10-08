@@ -4,19 +4,21 @@ import {
   DollarSign, Users, AlertCircle, Plus, Send, Phone, 
   MapPin, Calendar, Compass, Key, Lock, LogOut, Check, 
   Clock, Mail, Award, Sparkles, Bot, Copy, RefreshCw, Lightbulb,
-  CreditCard, Wallet, Building2, AlertTriangle
+  CreditCard, Wallet, Building2, AlertTriangle, Truck, Bus, 
+  Fuel, Gauge, Settings, Wind
 } from 'lucide-react';
 
 export default function App() {
   const [view, setView] = useState('landing'); // 'landing' | 'login' | 'dashboard'
   const [dashboardTab, setDashboardTab] = useState('fleet'); // 'fleet' | 'marketing'
+  const [fleetFilter, setFleetFilter] = useState('all'); // 'all' | 'camionetas' | 'buses' | 'camiones'
   
   // Auth Gerencial
   const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [authError, setAuthError] = useState('');
 
   // Cotizador Interactivo de Rent a Car
-  const [vehicleCategory, setVehicleCategory] = useState('4x4');
+  const [selectedVehicleId, setSelectedVehicleId] = useState('hilux');
   const [rentalDays, setRentalDays] = useState(3);
   const [withDriver, setWithDriver] = useState(false);
   const [miningKit, setMiningKit] = useState(true);
@@ -26,41 +28,166 @@ export default function App() {
     name: '',
     phone: '',
     dniRuc: '',
-    paymentMethod: 'Transferencia Bancaria (Factura)',
-    serviceType: 'Alquiler de Camioneta 4x4 (Equipamiento Minero)',
+    paymentMethod: 'Transferencia Bancaria (Factura BCP/BBVA)',
+    vehicleName: 'Camioneta Toyota Hilux 4x4',
     pickupDate: '',
     returnDate: ''
   });
   const [bookingSuccess, setBookingSuccess] = useState(false);
 
+  // FLOTA OFICIAL COMPLETA DE VIP CAR HUANCAYO
+  const vehiclesCatalog = [
+    // CAMIONETAS Y SUVS
+    {
+      id: 'hilux',
+      name: 'Camioneta Toyota Hilux 4x4',
+      category: 'camionetas',
+      seats: '5 asientos',
+      transmission: 'Mecánico',
+      traction: '4x4',
+      ac: 'A/C',
+      baseRate: 290,
+      image: 'https://images.unsplash.com/photo-1559416523-140ddc3d238c?auto=format&fit=crop&w=800&q=80',
+      description: 'Doble cabina homologada con estándar minero (jaula interna, pértiga y circulina).',
+      tag: 'Más Solicitada'
+    },
+    {
+      id: 'fortuner',
+      name: 'Camioneta Toyota Fortuner 4x4',
+      category: 'camionetas',
+      seats: '7 asientos',
+      transmission: 'Automático',
+      traction: '4x4',
+      ac: 'A/C',
+      baseRate: 350,
+      image: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80',
+      description: 'SUV de lujo para directores, supervisores y viajes familiares al Valle del Mantaro.',
+      tag: 'Alta Gama'
+    },
+    {
+      id: 'prado',
+      name: 'Camioneta Land Cruiser Prado',
+      category: 'camionetas',
+      seats: '7 asientos',
+      transmission: 'Mecánico',
+      traction: '4x4',
+      ac: 'A/C',
+      baseRate: 380,
+      image: 'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&w=800&q=80',
+      description: 'Máximo confort y potencia todoterreno para viajes de larga distancia y trochas exigentes.',
+      tag: 'Ejecutiva'
+    },
+
+    // BUSES Y VANS
+    {
+      id: 'hiace',
+      name: 'Minivan Toyota Hiace',
+      category: 'buses',
+      seats: '17 pasajeros',
+      transmission: 'Mecánico',
+      traction: '4x2',
+      ac: 'A/C',
+      baseRate: 360,
+      image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80',
+      description: 'Traslado express al Aeropuerto de Jauja, Selva Central y comitivas institucionales.',
+      tag: 'Traslados Aeropuerto'
+    },
+    {
+      id: 'coaster',
+      name: 'Minibús Toyota Coaster',
+      category: 'buses',
+      seats: '33 pasajeros',
+      transmission: 'Mecánico',
+      traction: '4x2',
+      ac: 'A/C',
+      baseRate: 550,
+      image: 'https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=800&q=80',
+      description: 'Movilidad de cuadrillas de personal, delegaciones y turismo regional en Junín.',
+      tag: 'Personal'
+    },
+    {
+      id: 'omnibus',
+      name: 'Ómnibus Interurbano',
+      category: 'buses',
+      seats: '42 y 46 Pasajeros',
+      transmission: 'Mecánico',
+      traction: '4x2',
+      ac: 'A/C Climatizado',
+      baseRate: 850,
+      image: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80',
+      description: 'Transporte interprovincial Huancayo - Lima, eventos corporativos y viajes de gran escala.',
+      tag: 'Gran Capacidad'
+    },
+
+    // CAMIONES DE OPERACIÓN Y CARGA
+    {
+      id: 'camion-personal',
+      name: 'Camión para Traslado de Personal',
+      category: 'camiones',
+      seats: 'Personal Operativo',
+      transmission: 'Mecánico',
+      traction: '4x2',
+      ac: 'A/C',
+      baseRate: 480,
+      image: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=800&q=80',
+      description: 'Baranda alta acondicionada para cuadrillas de campo en sectores viales y agrícolas.',
+      tag: 'Operativo'
+    },
+    {
+      id: 'camion-materiales',
+      name: 'Camión Transporte de Materiales (Furgón)',
+      category: 'camiones',
+      seats: '5 Toneladas',
+      transmission: 'Mecánico',
+      traction: '4x2',
+      ac: 'A/C',
+      baseRate: 520,
+      image: 'https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&w=800&q=80',
+      description: 'Furgón cerrado de aluminio para encomiendas, logística segura y carga pesada protegida.',
+      tag: 'Carga 5TN'
+    },
+    {
+      id: 'camion-cisterna',
+      name: 'Camión Cisterna (Agua / Combustible)',
+      category: 'camiones',
+      seats: 'Tanque Industrial',
+      transmission: 'Mecánico',
+      traction: '4x2 / 6x4',
+      ac: 'A/C',
+      baseRate: 750,
+      image: 'https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=800&q=80',
+      description: 'Abastecimiento para proyectos de construcción, carreteras y campamentos en la sierra.',
+      tag: 'Especializado'
+    },
+  ];
+
   // Dashboard Gerencial: Control de Flota
   const [rentals, setRentals] = useState([
-    { id: 'VIP-701', client: 'Consorcio Minero Junín', vehicle: 'Toyota Hilux 4x4 (W4B-231)', days: 30, total: 9600, status: 'En Ruta', driver: 'Sin Chofer' },
-    { id: 'VIP-702', client: 'Dra. Patricia Lozano', vehicle: 'Hyundai Tucson SUV (AGF-882)', days: 4, total: 1040, status: 'Disponible', driver: 'Sin Chofer' },
-    { id: 'VIP-703', client: 'Minera Chinalco Contratistas', vehicle: 'Ford Ranger 4x4 (B2C-109)', days: 15, total: 5400, status: 'En Ruta', driver: 'Con Chofer' },
-    { id: 'VIP-704', client: 'Delegación Turismo Lima', vehicle: 'Hyundai H1 Minivan (D4E-776)', days: 2, total: 800, status: 'Retorno Hoy', driver: 'Con Chofer' },
+    { id: 'VIP-701', client: 'Consorcio Vial Junín', vehicle: 'Toyota Hilux 4x4 (W4B-231)', days: 30, total: 9600, status: 'En Ruta', driver: 'Sin Chofer' },
+    { id: 'VIP-702', client: 'Minera Chinalco Contratistas', vehicle: 'Camión Cisterna (W3C-911)', days: 20, total: 15000, status: 'En Ruta', driver: 'Con Chofer' },
+    { id: 'VIP-703', client: 'Dra. Patricia Lozano', vehicle: 'Land Cruiser Prado (AGF-882)', days: 4, total: 1520, status: 'Disponible', driver: 'Sin Chofer' },
+    { id: 'VIP-704', client: 'Colegio Andino (Excursión)', vehicle: 'Ómnibus Interurbano (B2C-109)', days: 3, total: 2550, status: 'En Ruta', driver: 'Con Chofer' },
+    { id: 'VIP-705', client: 'Delegación Turismo Lima', vehicle: 'Toyota Hiace 17p (D4E-776)', days: 2, total: 720, status: 'Retorno Hoy', driver: 'Con Chofer' },
   ]);
   const [newRental, setNewRental] = useState({ client: '', vehicle: '', days: '', total: '', driver: 'Sin Chofer' });
 
-  // MÓDULO MARKETING IA (GEMINI GEM DE MARKETING VIP CAR)
+  // MÓDULO MARKETING IA (GEMINI GEM)
   const [marketingPrompt, setMarketingPrompt] = useState('');
   const [marketingPlatform, setMarketingPlatform] = useState('tiktok');
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedResult, setGeneratedResult] = useState(null);
   const [copied, setCopied] = useState(false);
 
-  // Tarifas diarias promedio en Soles (S/.)
-  const rates = {
-    '4x4': 290,
-    'suv': 240,
-    'sedan': 160,
-    'van': 360,
-  };
+  const selectedVehicle = vehiclesCatalog.find(v => v.id === selectedVehicleId) || vehiclesCatalog[0];
 
   const calculateTotal = () => {
-    let base = rates[vehicleCategory] || 250;
-    if (miningKit && vehicleCategory === '4x4') base += 30;
-    if (withDriver) base += 130;
+    let base = selectedVehicle.baseRate;
+    if (miningKit && (selectedVehicle.category === 'camionetas' || selectedVehicle.category === 'camiones')) {
+      base += 30; // Kit minero, pértiga, circulina
+    }
+    if (withDriver) {
+      base += 130; // Chofer calificado
+    }
     return base * rentalDays;
   };
 
@@ -102,29 +229,29 @@ export default function App() {
       let tags = '';
 
       if (marketingPlatform === 'tiktok') {
-        title = `🎬 Guion Viral para TikTok / Reels: ${marketingPrompt || 'Promoción de Flota VIP CAR'}`;
-        hook = `💥 [Segundo 0-3]: "¿Planeas viajar a Selva Central o subir a obra este fin de semana y tu auto no aguanta la altura? ¡Mira esto!"`;
-        body = `🚗 [Segundo 4-15]: Muestra tomas cinemáticas de una Toyota Hilux 4x4 o SUV cruzando Ticlio o la Carretera Central. "En VIP CAR Huancayo te entregamos camionetas listas con tanque lleno, monitoreo GPS 24/7 y seguro total. Recuerda reservar con 24h a 48h de anticipación para asegurar tu unidad impecable."\n\n📍 [Segundo 16-25]: "Aceptamos transferencias BCP, BBVA, Yape, Plin y tarjetas de crédito con factura electrónica."`;
-        cta = `👉 [Segundo 26-30]: "Escríbenos al WhatsApp 999 461 414 o visita Av. Manuel Traverso 597 en Huancayo."`;
-        tags = `#Huancayo #AlquilerDeAutosHuancayo #Hilux4x4 #JaujaAeropuerto #SelvaCentral #VipCarHuancayo`;
+        title = `🎬 Guion Viral para TikTok / Reels: ${marketingPrompt || 'Flota Completa VIP CAR Huancayo'}`;
+        hook = `💥 [Segundo 0-3]: "¿Buscabas camioneta 4x4, Van de 17 pasajeros o camión cisterna en Huancayo para tu obra? ¡Mira lo que tenemos listo!"`;
+        body = `🚗 [Segundo 4-15]: Muestra tomas rápidas de la Toyota Hilux, Fortuner, Prado, Minivan Hiace y Camión Cisterna. "En VIP CAR Huancayo no solo alquilamos camionetas; tenemos desde Coasters de 33 pasajeros hasta camiones de carga de 5 toneladas con equipamiento minero homologado."\n\n📍 [Segundo 16-25]: "Recuerda que todas las reservas se hacen con 24 a 48 horas de anticipación. Entregamos en Urb. La Merced o en el Aeropuerto de Jauja. Aceptamos facturas BCP/BBVA y tarjetas."`;
+        cta = `👉 [Segundo 26-30]: "Toca el enlace de nuestro perfil o escribe al WhatsApp 999 461 414 para cotizar tu unidad."`;
+        tags = `#Huancayo #AlquilerDeAutosHuancayo #ToyotaHilux #Fortuner #ToyotaHiace #CamionCisterna #VipCarHuancayo`;
       } else if (marketingPlatform === 'facebook') {
-        title = `📢 Copy Publicitario para Facebook & Instagram Ads: Campaña de Conversión`;
-        hook = `🚙 ¿NECESITAS UNA CAMIONETA 4X4 O TRASLADO EJECUTIVO EN HUANCAYO SIN RIESGOS?`;
-        body = `Para proyectos de ingeniería, minería o viajes familiares en la sierra central:\n\n✅ Toyota Hilux 4x4 homologadas para minería con pértiga y jaula.\n✅ SUVs familiares y Minivans H1.\n✅ Métodos de pago flexibles: Factura con transferencias BCP/BBVA, Yape/Plin y tarjetas de crédito.\n\n⚠️ IMPORTANTE: Reserva con mínimo 24 a 48 horas de anticipación para garantizar disponibilidad y preparación técnica.`;
-        cta = `📲 ¡Haz clic en 'Enviar Mensaje' o comunícate al 999 461 414 para coordinar tu contrato!`;
-        tags = `Objetivo sugerido: Clientes potenciales / WhatsApp | Radio: Huancayo + Valle del Mantaro`;
+        title = `📢 Copy Publicitario para Facebook & Instagram Ads: Campaña B2B y Minería`;
+        hook = `🚜 FLOTA PESADA, BUSES Y CAMIONETAS 4X4 PARA EMPRESAS Y CONTRATISTAS EN JUNÍN`;
+        body = `¿Tu proyecto minero o vial en la sierra central necesita vehículos confiables?\n\nEn VIP CAR RENTAL HUANCAYO ponemos a tu disposición:\n• Toyota Hilux 4x4, Fortuner y Land Cruiser Prado con estándar minero (pértiga y jaula).\n• Vans Toyota Hiace (17p), Minibuses Coaster (33p) y Ómnibus (46p).\n• Camiones furgón cerrado de 5TN y Camiones Cisterna.\n\n✅ Monitoreo Satelital GPS 24/7 y Seguro Total.\n✅ Conductores con examen psicosensométrico y manejo defensivo.\n⚠️ Reserva tu unidad con mínimo 24 a 48 horas de anticipación para habilitación técnica.`;
+        cta = `📲 ¡Cotiza hoy mismo al WhatsApp 999 461 414 o visita nuestras oficinas en Av. Manuel Traverso 597, Urb. La Merced!`;
+        tags = `Segmentación recomendada: Huancayo, Concepción, Tarma, Chanchamayo, La Oroya, Pasco.`;
       } else if (marketingPlatform === 'whatsapp') {
-        title = `💬 Plantilla de Difusión por WhatsApp: Recordatorio de Anticipación y Pagos`;
-        hook = `¡Hola [Nombre del Cliente]! 👋 Desde *VIP CAR Huancayo* te saludamos.`;
-        body = `Si estás programando salidas a mina, inspecciones o traslados hacia el Aeropuerto de Jauja para este fin de semana, te recomendamos coordinar tu reserva con *mínimo 24 a 48 horas de anticipación* 🕒.\n\nNuestras unidades se entregan con inspección mecánica y desinfección total.\n\n💳 Facilidades de pago: Transferencias BCP/BBVA, Yape, Plin y tarjetas de crédito/débito con factura electrónica formal.`;
-        cta = `👉 ¿Te separamos una unidad? Responde a este chat o llámanos al *999 461 414*.`;
-        tags = `Horario recomendado de difusión: 9:00 AM - 11:30 AM`;
+        title = `💬 Mensaje Corporativo para WhatsApp Masivo: Catálogo Integral`;
+        hook = `¡Estimados ingenieros y contratistas! 👋 Desde *VIP CAR Huancayo* les compartimos nuestra disponibilidad de flota 2026.`;
+        body = `Contamos con unidades listas para entrega inmediata previa coordinación (margen 24-48h):\n\n🔹 *Camionetas 4x4:* Toyota Hilux, Fortuner y Prado.\n🔹 *Buses y Vans:* Toyota Hiace (17 asientos), Coaster (33 asientos) y Ómnibus Interurbano (46 asientos).\n🔹 *Transporte Pesado:* Camión furgón de 5 toneladas y Camión Cisterna para agua/combustible.\n\n💳 Facturación electrónica con RUC 20601590345 y transferencias BCP, BBVA, Yape y tarjetas de crédito.`;
+        cta = `👉 Responda a este mensaje con la unidad que requiere para enviarle su cotización en PDF al instante. Central: *999 461 414*.`;
+        tags = `Tip de envío: Dirigido a Jefes de Logística y Transportes.`;
       } else {
-        title = `🏢 Propuesta Formal B2B para Minería y Contratistas (Email / Carta)`;
-        hook = `Asunto: Alquiler de Camionetas 4x4 Homologadas en Junín - Condiciones Comerciales VIP CAR EIRL`;
-        body = `Estimado(a) Responsable de Logística:\n\nPonemos a su disposición nuestras unidades Toyota Hilux 4x4 con equipamiento minero bajo norma DS 024-2016-EM.\n\nCondiciones de Servicio:\n• Margen de reserva: Solicitar asignación de unidades con un margen mínimo de 48 horas para habilitación técnica e inducción de conductores.\n• Métodos de pago corporativos: Transferencia interbancaria (CCI), cheques de gerencia y crédito a 15/30 días previa evaluación crediticia.\n• Emisión formal de Facturación Electrónica SUNAT (RUC 20601590345).`;
-        cta = `Contacto comercial directo: 999 461 414 / reservas@vipcarhuancayo.com`;
-        tags = `Adjuntar: Cotización formal PDF y póliza de seguro de la unidad.`;
+        title = `🏢 Licitación / Propuesta Formal B2B para Minería y Transporte Industrial`;
+        hook = `Asunto: Propuesta Técnica y Económica de Renta de Flota Pesada y Liviana - VIP CAR EIRL`;
+        body = `A la atención de la Gerencia de Operaciones y Logística:\n\nPresentamos formalmente nuestro portafolio de vehículos para faenas en Junín, Pasco y Huancavelica:\n\n1. LÍNEA CAMIONETAS: Toyota Hilux 4x4, Fortuner y Land Cruiser Prado certificadas para altura.\n2. LÍNEA TRANSPORTE DE PERSONAL: Vans Hiace (17p), Coaster (33p) y Buses Interurbanos de 46 pasajeros con cinturones de 3 puntos y botiquín reglamentario.\n3. LÍNEA LOGÍSTICA PESADA: Camiones de traslado de cuadrillas, furgones de 5TN y Camiones Cisterna homologados.\n\n*Condiciones Operativas:*\n- Plazo de reserva técnica: Mínimo 48 horas.\n- Formas de pago: Transferencias CCI corporativas con crédito a 15 y 30 días según calificación.`;
+        cta = `Contacto institucional directo: 999 461 414 / reservas@vipcarhuancayo.com`;
+        tags = `Adjuntar: Dossier fotográfico con Fichas Técnicas MTC.`;
       }
 
       setGeneratedResult({ title, hook, body, cta, tags });
@@ -140,6 +267,10 @@ export default function App() {
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
+
+  const filteredVehicles = fleetFilter === 'all' 
+    ? vehiclesCatalog 
+    : vehiclesCatalog.filter(v => v.category === fleetFilter);
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 flex flex-col font-sans selection:bg-red-600 selection:text-white">
@@ -172,7 +303,7 @@ export default function App() {
                 <span className="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded bg-white text-red-700">RENTAL</span>
               </div>
               <span className="text-[11px] block text-neutral-300 font-medium tracking-wide">
-                Alquiler de Vehículos & Taxi Huancayo - Jauja
+                Camionetas 4x4, Buses, Vans & Camiones Huancayo
               </span>
             </div>
           </div>
@@ -206,33 +337,33 @@ export default function App() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative text-center">
               
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold bg-red-600/15 text-red-400 border border-red-600/30 mb-6">
-                <Award className="w-4 h-4 text-white" /> Más de 10 Años de Trayectoria en Transporte Corporativo y Minero
+                <Award className="w-4 h-4 text-white" /> Más de 10 Años de Trayectoria en Transporte Corporativo, Minero y Turístico
               </div>
 
               <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white max-w-4xl mx-auto leading-tight">
-                Alquiler de Camionetas 4x4, SUVs y Autos en <span className="text-red-500">Huancayo</span>
+                Flota Completa de Camionetas 4x4, Buses y Camiones en <span className="text-red-500">Huancayo</span>
               </h1>
               
               <p className="mt-5 text-base sm:text-lg text-neutral-300 max-w-2xl mx-auto">
-                Flota moderna con o sin conductor para empresas, operaciones mineras y turismo familiar. Cobertura directa hacia Lima, Jauja Aeropuerto, Selva Central y toda la sierra central.
+                Alquiler de Toyota Hilux, Fortuner, Prado, Vans Hiace, Minibuses Coaster, Ómnibus de 46p y Camiones de carga con o sin conductor. Cobertura en toda la región Junín y la sierra central.
               </p>
 
               <div className="mt-8 flex flex-wrap justify-center gap-4">
                 <a
-                  href="#cotizador"
+                  href="#flota"
                   className="bg-red-600 hover:bg-red-500 text-white font-black px-7 py-3.5 rounded-xl shadow-lg shadow-red-700/30 transition flex items-center gap-2"
                 >
-                  <Key className="w-4 h-4" /> Cotizar Alquiler Inmediato
+                  <Car className="w-4 h-4" /> Ver Flota y Especificaciones
                 </a>
                 <a
-                  href="#pagos"
-                  className="bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 text-neutral-100 font-semibold px-7 py-3.5 rounded-xl transition"
+                  href="#cotizador"
+                  className="bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 text-neutral-100 font-semibold px-7 py-3.5 rounded-xl transition flex items-center gap-2"
                 >
-                  Métodos de Pago
+                  <Key className="w-4 h-4" /> Cotizador en Línea
                 </a>
               </div>
 
-              {/* BANNER DE AVISO DE TIEMPO / MARGEN DE ANTICIPACIÓN */}
+              {/* AVISO DE MARGEN DE ANTICIPACIÓN */}
               <div className="mt-10 max-w-3xl mx-auto bg-amber-500/10 border border-amber-500/30 rounded-2xl p-4 flex items-start sm:items-center gap-3.5 text-left">
                 <div className="p-2 rounded-xl bg-amber-500/20 text-amber-400 shrink-0">
                   <AlertTriangle className="w-5 h-5" />
@@ -267,51 +398,106 @@ export default function App() {
             </div>
           </section>
 
-          {/* SERVICIOS */}
-          <section id="servicios" className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <span className="text-xs font-bold text-red-500 uppercase tracking-widest">Lo que ofrecemos</span>
-              <h2 className="text-3xl font-extrabold text-white mt-1">Servicios de Transporte & Alquiler</h2>
-              <p className="text-neutral-400 text-sm mt-1">Soluciones integrales de movilidad en Huancayo y Junín.</p>
+          {/* CATÁLOGO DE FLOTA CON PESTAÑAS (FOTOS Y ESPECIFICACIONES) */}
+          <section id="flota" className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-10">
+              <span className="text-xs font-bold text-red-500 uppercase tracking-widest">Catálogo Oficial VIP CAR Huancayo</span>
+              <h2 className="text-3xl font-extrabold text-white mt-1">Nuestra Variedad de Vehículos</h2>
+              <p className="text-neutral-400 text-sm mt-1">Elige la unidad según tus necesidades de transporte, obra o turismo.</p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="bg-neutral-900/70 border border-neutral-800 p-6 rounded-3xl hover:border-red-600/60 transition">
-                <div className="w-12 h-12 rounded-2xl bg-red-600/15 text-red-500 flex items-center justify-center mb-5">
-                  <Shield className="w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">Camionetas 4x4 (Estándar Minero)</h3>
-                <p className="text-neutral-300 text-sm leading-relaxed mb-4">
-                  Toyota Hilux doble cabina con pértiga, circulina, jaula interna antivuelco y toda la homologación exigida para ingresar a unidades mineras.
-                </p>
-                <div className="text-xs text-red-400 font-semibold">Alquiler con o sin conductor</div>
-              </div>
+            {/* Filtros de Categoría */}
+            <div className="flex flex-wrap justify-center gap-2 mb-12">
+              {[
+                { id: 'all', label: 'Todos los Vehículos' },
+                { id: 'camionetas', label: 'Camionetas 4x4 & SUVs' },
+                { id: 'buses', label: 'Buses & Vans (Turismo / Personal)' },
+                { id: 'camiones', label: 'Camiones & Cisternas' },
+              ].map((btn) => (
+                <button
+                  key={btn.id}
+                  onClick={() => setFleetFilter(btn.id)}
+                  className={`px-5 py-2.5 rounded-xl text-xs font-bold transition border ${
+                    fleetFilter === btn.id
+                      ? 'bg-red-600 border-red-500 text-white shadow-lg shadow-red-700/30'
+                      : 'bg-neutral-900 border-neutral-800 text-neutral-400 hover:text-white hover:border-neutral-700'
+                  }`}
+                >
+                  {btn.label}
+                </button>
+              ))}
+            </div>
 
-              <div className="bg-neutral-900/70 border border-neutral-800 p-6 rounded-3xl hover:border-red-600/60 transition">
-                <div className="w-12 h-12 rounded-2xl bg-red-600/15 text-red-500 flex items-center justify-center mb-5">
-                  <Compass className="w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">Taxi Privado Huancayo - Jauja Aeropuerto</h3>
-                <p className="text-neutral-300 text-sm leading-relaxed mb-4">
-                  Traslados directos y seguros hacia el Aeropuerto Francisco Carlé de Jauja. Conductores con amplia experiencia en ruta y servicio puntual.
-                </p>
-                <div className="text-xs text-red-400 font-semibold">Servicio puerta a puerta</div>
-              </div>
+            {/* Grid de Vehículos */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredVehicles.map((car) => (
+                <div 
+                  key={car.id} 
+                  className="bg-neutral-900/80 border border-neutral-800 rounded-3xl overflow-hidden hover:border-red-600/60 transition group flex flex-col justify-between"
+                >
+                  <div>
+                    {/* Imagen del vehículo */}
+                    <div className="relative h-52 overflow-hidden bg-neutral-950">
+                      <img 
+                        src={car.image} 
+                        alt={car.name} 
+                        className="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-90"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent" />
+                      <span className="absolute top-3 right-3 bg-red-600 text-white text-[10px] font-black uppercase px-2.5 py-1 rounded-full shadow-md">
+                        {car.tag}
+                      </span>
+                    </div>
 
-              <div className="bg-neutral-900/70 border border-neutral-800 p-6 rounded-3xl hover:border-red-600/60 transition">
-                <div className="w-12 h-12 rounded-2xl bg-red-600/15 text-red-500 flex items-center justify-center mb-5">
-                  <Users className="w-6 h-6" />
+                    {/* Contenido de la tarjeta */}
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold text-white mb-2">{car.name}</h3>
+                      <p className="text-xs text-neutral-400 leading-relaxed mb-5">
+                        {car.description}
+                      </p>
+
+                      {/* Especificaciones Técnicas (Igual que en la imagen de la web) */}
+                      <div className="grid grid-cols-2 gap-3 py-3 border-y border-neutral-800 text-xs">
+                        <div className="flex items-center gap-2 text-neutral-300">
+                          <Users className="w-4 h-4 text-red-500" />
+                          <span>{car.seats}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-neutral-300">
+                          <Settings className="w-4 h-4 text-red-500" />
+                          <span>{car.transmission}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-neutral-300">
+                          <Gauge className="w-4 h-4 text-red-500" />
+                          <span>{car.traction}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-neutral-300">
+                          <Wind className="w-4 h-4 text-red-500" />
+                          <span>{car.ac}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Botón de Cotizar */}
+                  <div className="p-6 pt-0 flex items-center justify-between">
+                    <div>
+                      <span className="text-[11px] text-neutral-400 block">Tarifa estimada:</span>
+                      <span className="text-lg font-black text-white">Desde <strong className="text-red-500">S/ {car.baseRate}</strong>/día</span>
+                    </div>
+                    <a
+                      href="#cotizador"
+                      onClick={() => setSelectedVehicleId(car.id)}
+                      className="bg-red-600/15 hover:bg-red-600 text-red-400 hover:text-white font-bold text-xs px-4 py-2.5 rounded-xl border border-red-600/30 transition"
+                    >
+                      Seleccionar
+                    </a>
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">Transporte de Personal & Viajes Privados</h3>
-                <p className="text-neutral-300 text-sm leading-relaxed mb-4">
-                  Minivans Hyundai H1 y buses para personal y delegaciones hacia Lima, La Merced, Tarma, Oxapampa, Huancavelica y Ayacucho.
-                </p>
-                <div className="text-xs text-red-400 font-semibold">Capacidad de 6, 11, 16 y 20 asientos</div>
-              </div>
+              ))}
             </div>
           </section>
 
-          {/* NUEVA SECCIÓN: MÉTODOS DE PAGO Y POLÍTICA DE GARANTÍAS */}
+          {/* MÉTODOS DE PAGO Y POLÍTICA DE GARANTÍAS */}
           <section id="pagos" className="py-16 bg-neutral-900/30 border-t border-neutral-900">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="text-center mb-12">
@@ -321,7 +507,6 @@ export default function App() {
               </div>
 
               <div className="grid md:grid-cols-3 gap-6">
-                {/* Método 1: Bancos y Transferencias */}
                 <div className="bg-neutral-900/80 border border-neutral-800 p-6 rounded-3xl">
                   <div className="w-12 h-12 rounded-2xl bg-red-600/15 text-red-500 flex items-center justify-center mb-4">
                     <Building2 className="w-6 h-6" />
@@ -335,7 +520,6 @@ export default function App() {
                   </span>
                 </div>
 
-                {/* Método 2: Billeteras Digitales */}
                 <div className="bg-neutral-900/80 border border-neutral-800 p-6 rounded-3xl">
                   <div className="w-12 h-12 rounded-2xl bg-amber-500/15 text-amber-400 flex items-center justify-center mb-4">
                     <Wallet className="w-6 h-6" />
@@ -349,7 +533,6 @@ export default function App() {
                   </span>
                 </div>
 
-                {/* Método 3: Tarjetas Débito y Crédito */}
                 <div className="bg-neutral-900/80 border border-neutral-800 p-6 rounded-3xl">
                   <div className="w-12 h-12 rounded-2xl bg-blue-600/15 text-blue-400 flex items-center justify-center mb-4">
                     <CreditCard className="w-6 h-6" />
@@ -364,7 +547,6 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Nota sobre la Garantía del Alquiler */}
               <div className="mt-8 bg-neutral-900 border border-neutral-800 p-4 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div className="text-xs text-neutral-300">
                   <strong className="text-white block mb-0.5">🔒 Garantía de Alquiler Obligatoria:</strong>
@@ -387,26 +569,25 @@ export default function App() {
               </div>
 
               <div className="bg-neutral-900 border border-neutral-800 p-6 sm:p-8 rounded-3xl shadow-xl">
-                <label className="text-xs font-bold text-neutral-400 uppercase tracking-wider block mb-3">1. Tipo de Vehículo</label>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-                  {[
-                    { id: '4x4', name: 'Pick-Up 4x4', desc: 'Toyota Hilux' },
-                    { id: 'suv', name: 'SUV Cerrada', desc: 'Hyundai Tucson' },
-                    { id: 'sedan', name: 'Auto Sedán', desc: 'Yaris / Corolla' },
-                    { id: 'van', name: 'Minivan H1', desc: 'Grupos y Buses' },
-                  ].map((cat) => (
+                <label className="text-xs font-bold text-neutral-400 uppercase tracking-wider block mb-3">
+                  1. Vehículo Seleccionado: <span className="text-white font-black">{selectedVehicle.name}</span>
+                </label>
+                
+                {/* Selector rápido de vehículos de la flota */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 mb-6">
+                  {vehiclesCatalog.map((v) => (
                     <button
-                      key={cat.id}
-                      onClick={() => setVehicleCategory(cat.id)}
-                      className={`p-3.5 rounded-2xl text-left border transition ${
-                        vehicleCategory === cat.id
-                          ? 'bg-red-600/15 border-red-600 text-white'
+                      key={v.id}
+                      onClick={() => setSelectedVehicleId(v.id)}
+                      className={`p-3 rounded-xl text-left border transition ${
+                        selectedVehicleId === v.id
+                          ? 'bg-red-600/20 border-red-500 text-white'
                           : 'bg-neutral-950/40 border-neutral-800 text-neutral-400 hover:border-neutral-700'
                       }`}
                     >
-                      <div className="font-bold text-sm text-white">{cat.name}</div>
-                      <div className="text-xs text-neutral-400">{cat.desc}</div>
-                      <div className="text-xs font-black text-red-400 mt-2">S/ {rates[cat.id]}/día</div>
+                      <div className="font-bold text-xs text-white truncate">{v.name}</div>
+                      <div className="text-[10px] text-neutral-400">{v.seats} • {v.traction}</div>
+                      <div className="text-xs font-black text-red-400 mt-1">S/ {v.baseRate}/día</div>
                     </button>
                   ))}
                 </div>
@@ -440,15 +621,15 @@ export default function App() {
                     }`}
                   >
                     <div>
-                      <div className="text-sm font-semibold text-white">Conductor Profesional Capacitado</div>
-                      <div className="text-xs text-neutral-400">+S/ 130 por día</div>
+                      <div className="text-sm font-semibold text-white">Conductor Profesional Certificado</div>
+                      <div className="text-xs text-neutral-400">+S/ 130 por jornada diaria</div>
                     </div>
                     <div className={`w-5 h-5 rounded-md flex items-center justify-center border ${withDriver ? 'bg-red-600 border-red-600 text-white' : 'border-neutral-700'}`}>
                       {withDriver && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                     </div>
                   </div>
 
-                  {vehicleCategory === '4x4' && (
+                  {(selectedVehicle.category === 'camionetas' || selectedVehicle.category === 'camiones') && (
                     <div 
                       onClick={() => setMiningKit(!miningKit)}
                       className={`p-4 rounded-2xl border cursor-pointer flex items-center justify-between transition ${
@@ -472,7 +653,7 @@ export default function App() {
                     <span className="text-3xl font-black text-red-500">S/ {calculateTotal()}</span>
                   </div>
                   <a
-                    href={`https://wa.me/51999461414?text=Hola%20VIP%20CAR%20Huancayo,%20deseo%20cotizar%20un%20alquiler%20de%20veh%C3%ADculo%20${vehicleCategory}%20por%20${rentalDays}%20d%C3%ADas.%20Total%20estimado:%20S/${calculateTotal()}`}
+                    href={`https://wa.me/51999461414?text=Hola%20VIP%20CAR%20Huancayo,%20deseo%20cotizar%20un(a)%20${encodeURIComponent(selectedVehicle.name)}%20por%20${rentalDays}%20d%C3%ADas.%20Total%20estimado:%20S/${calculateTotal()}`}
                     target="_blank"
                     rel="noreferrer"
                     className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-red-600 hover:bg-red-500 text-white font-bold px-6 py-3.5 rounded-xl transition shadow-lg shadow-red-700/30"
@@ -484,16 +665,15 @@ export default function App() {
             </div>
           </section>
 
-          {/* FORMULARIO DE RESERVA CON POLÍTICA DE TIEMPO Y MÉTODOS DE PAGO */}
+          {/* FORMULARIO DE RESERVA */}
           <section className="py-20 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-neutral-900 border border-neutral-800 p-8 rounded-3xl shadow-xl">
               <div className="text-center mb-6">
                 <Calendar className="w-8 h-8 text-red-500 mx-auto mb-2" />
-                <h2 className="text-2xl font-bold text-white">Reserva tu Vehículo o Traslado</h2>
+                <h2 className="text-2xl font-bold text-white">Reserva tu Vehículo o Flota</h2>
                 <p className="text-neutral-400 text-sm">Oficina central en Urb. La Merced o entrega en el Aeropuerto de Jauja</p>
               </div>
 
-              {/* Recordatorio de anticipación en el formulario */}
               <div className="mb-6 p-3.5 rounded-xl bg-red-950/40 border border-red-800/40 text-xs text-neutral-300 flex items-center gap-2.5">
                 <Clock className="w-4 h-4 text-red-400 shrink-0" />
                 <span>
@@ -559,22 +739,19 @@ export default function App() {
                       />
                     </div>
                     <div>
-                      <label className="text-xs text-neutral-300 font-semibold block mb-1">Servicio Solicitado</label>
+                      <label className="text-xs text-neutral-300 font-semibold block mb-1">Unidad de la Flota Deseada</label>
                       <select
-                        value={booking.serviceType}
-                        onChange={(e) => setBooking({ ...booking, serviceType: e.target.value })}
+                        value={booking.vehicleName}
+                        onChange={(e) => setBooking({ ...booking, vehicleName: e.target.value })}
                         className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-red-500 text-white"
                       >
-                        <option>Alquiler de Camioneta 4x4 (Equipamiento Minero)</option>
-                        <option>Alquiler de SUV Familiar</option>
-                        <option>Alquiler de Auto Sedán</option>
-                        <option>Taxi Privado Huancayo - Aeropuerto Jauja</option>
-                        <option>Transporte de Personal en Minivan</option>
+                        {vehiclesCatalog.map((v) => (
+                          <option key={v.id} value={v.name}>{v.name} ({v.seats})</option>
+                        ))}
                       </select>
                     </div>
                   </div>
 
-                  {/* Selector de Método de Pago Previsto */}
                   <div>
                     <label className="text-xs text-neutral-300 font-semibold block mb-1">Modalidad de Pago Preferida</label>
                     <select
@@ -689,10 +866,9 @@ export default function App() {
         </div>
       )}
 
-      {/* VISTA 3: DASHBOARD PRIVILEGIADO GERENCIAL CON MARKETING IA */}
+      {/* VISTA 3: DASHBOARD PRIVILEGIADO GERENCIAL */}
       {view === 'dashboard' && (
         <div className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-          
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-red-950 pb-6">
             <div>
               <span className="text-xs font-bold text-red-500 uppercase tracking-widest">VIP CAR Huancayo • Base Operativa</span>
@@ -728,8 +904,8 @@ export default function App() {
                     <span className="text-xs text-neutral-400 font-medium">Facturación del Mes</span>
                     <div className="p-2 bg-red-600/15 text-red-500 rounded-lg"><DollarSign className="w-5 h-5" /></div>
                   </div>
-                  <div className="text-2xl font-black text-white">S/ 48,900</div>
-                  <span className="text-xs text-emerald-400 font-semibold">↑ +18.5% contratos mineros</span>
+                  <div className="text-2xl font-black text-white">S/ 68,400</div>
+                  <span className="text-xs text-emerald-400 font-semibold">↑ +24.1% contratos mineros y pesados</span>
                 </div>
 
                 <div className="bg-neutral-900 border border-neutral-800 p-5 rounded-2xl">
@@ -737,17 +913,17 @@ export default function App() {
                     <span className="text-xs text-neutral-400 font-medium">Flota en Ruta</span>
                     <div className="p-2 bg-red-600/15 text-red-500 rounded-lg"><Car className="w-5 h-5" /></div>
                   </div>
-                  <div className="text-2xl font-black text-white">14 / 18</div>
-                  <span className="text-xs text-red-400 font-semibold">77.7% tasa de ocupación</span>
+                  <div className="text-2xl font-black text-white">19 / 24</div>
+                  <span className="text-xs text-red-400 font-semibold">79.1% tasa de ocupación</span>
                 </div>
 
                 <div className="bg-neutral-900 border border-neutral-800 p-5 rounded-2xl">
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs text-neutral-400 font-medium">Promedio de Renta</span>
-                    <div className="p-2 bg-neutral-800 text-white rounded-lg"><BarChart3 className="w-5 h-5" /></div>
+                    <span className="text-xs text-neutral-400 font-medium">Buses y Camiones Activos</span>
+                    <div className="p-2 bg-neutral-800 text-white rounded-lg"><Truck className="w-5 h-5" /></div>
                   </div>
-                  <div className="text-2xl font-black text-white">8.4 Días</div>
-                  <span className="text-xs text-neutral-300 font-semibold">Duración media de contrato</span>
+                  <div className="text-2xl font-black text-white">7 Unidades</div>
+                  <span className="text-xs text-neutral-300 font-semibold">Cisternas y Coasters en ruta</span>
                 </div>
 
                 <div className="bg-neutral-900 border border-neutral-800 p-5 rounded-2xl">
@@ -755,7 +931,7 @@ export default function App() {
                     <span className="text-xs text-neutral-400 font-medium">Garantías en Custodia</span>
                     <div className="p-2 bg-emerald-500/10 text-emerald-400 rounded-lg"><Shield className="w-5 h-5" /></div>
                   </div>
-                  <div className="text-2xl font-black text-emerald-400">S/ 14,000</div>
+                  <div className="text-2xl font-black text-emerald-400">S/ 22,500</div>
                   <span className="text-xs text-neutral-400 font-semibold">Depósitos seguros retenidos</span>
                 </div>
               </div>
@@ -814,7 +990,7 @@ export default function App() {
                       <input
                         type="text"
                         required
-                        placeholder="Ej. Consorcio Minero Junín"
+                        placeholder="Ej. Minera Chinalco / Consorcio"
                         value={newRental.client}
                         onChange={(e) => setNewRental({ ...newRental, client: e.target.value })}
                         className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-3.5 py-2 text-xs focus:outline-none focus:border-red-500 text-white"
@@ -826,7 +1002,7 @@ export default function App() {
                       <input
                         type="text"
                         required
-                        placeholder="Ej. Toyota Hilux 4x4 (W1B-871)"
+                        placeholder="Ej. Camión Cisterna (W3C-911)"
                         value={newRental.vehicle}
                         onChange={(e) => setNewRental({ ...newRental, vehicle: e.target.value })}
                         className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-3.5 py-2 text-xs focus:outline-none focus:border-red-500 text-white"
@@ -839,7 +1015,7 @@ export default function App() {
                         <input
                           type="number"
                           required
-                          placeholder="7"
+                          placeholder="15"
                           value={newRental.days}
                           onChange={(e) => setNewRental({ ...newRental, days: e.target.value })}
                           className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-3.5 py-2 text-xs focus:outline-none focus:border-red-500 text-white"
@@ -850,7 +1026,7 @@ export default function App() {
                         <input
                           type="number"
                           required
-                          placeholder="2100"
+                          placeholder="4500"
                           value={newRental.total}
                           onChange={(e) => setNewRental({ ...newRental, total: e.target.value })}
                           className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-3.5 py-2 text-xs focus:outline-none focus:border-red-500 text-white"
@@ -894,7 +1070,7 @@ export default function App() {
                     <div className="flex items-center gap-2">
                       <h2 className="text-xl font-black text-white">VIP CAR Marketing Gem IA</h2>
                       <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-600/30 text-red-300 border border-red-500/40">
-                        Potenciado para Huancayo & Minería
+                        Camionetas, Buses y Camiones
                       </span>
                     </div>
                     <p className="text-xs text-neutral-300 mt-1">
@@ -906,7 +1082,7 @@ export default function App() {
                 <div className="flex flex-wrap gap-2">
                   <button
                     onClick={() => {
-                      setMarketingPrompt('Promocionar camionetas 4x4 para ingenieros y contratistas mineros con reserva de 48h');
+                      setMarketingPrompt('Promocionar camionetas 4x4, buses Coaster y camiones para obras mineras');
                       setMarketingPlatform('facebook');
                     }}
                     className="text-xs bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 text-neutral-200 px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition"
@@ -915,12 +1091,12 @@ export default function App() {
                   </button>
                   <button
                     onClick={() => {
-                      setMarketingPrompt('Viajes de fin de semana al Valle del Mantaro y Selva Central con Yape y Tarjetas');
+                      setMarketingPrompt('Viajes de promoción y turismo en Minivans Hiace y Coaster');
                       setMarketingPlatform('tiktok');
                     }}
                     className="text-xs bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 text-neutral-200 px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition"
                   >
-                    <Lightbulb className="w-3.5 h-3.5 text-red-400" /> TikTok Turismo Selva
+                    <Lightbulb className="w-3.5 h-3.5 text-red-400" /> TikTok Turismo Grupos
                   </button>
                 </div>
               </div>
@@ -963,7 +1139,7 @@ export default function App() {
                       </label>
                       <textarea
                         rows={4}
-                        placeholder="Ej. Recordar a los clientes que reserven sus Hilux con 48h de anticipación y que aceptamos todas las tarjetas de crédito y facturación electrónica..."
+                        placeholder="Ej. Promocionar la nueva flota de Coaster y camiones cisterna con reserva de 48h y facilidades de facturación..."
                         value={marketingPrompt}
                         onChange={(e) => setMarketingPrompt(e.target.value)}
                         className="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-3 text-xs focus:outline-none focus:border-red-500 text-white resize-none"
