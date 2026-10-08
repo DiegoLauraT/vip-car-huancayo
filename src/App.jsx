@@ -143,7 +143,7 @@ export default function App() {
       traction: '4x2',
       ac: 'A/C',
       baseRate: 520,
-      image: 'https://vipcarhuancayo.com/wp-content/uploads/2025/01/camion01.jpg',
+      image: 'https://vipcarhuancayo.com/wp-content/uploads/2025/01/furg01.jpg',
       description: 'Furgón cerrado de aluminio para encomiendas, logística segura y carga pesada protegida.',
       tag: 'Carga 5TN'
     },
@@ -232,7 +232,7 @@ export default function App() {
       if (marketingPlatform === 'tiktok') {
         title = `🎬 Guion Viral para TikTok / Reels: ${marketingPrompt || 'Flota Completa VIP CAR Huancayo'}`;
         hook = `💥 [Segundo 0-3]: "¿Buscabas camioneta 4x4, Coaster de 33 asientos o camión cisterna en Huancayo para tu obra? ¡Mira lo que tenemos listo!"`;
-        body = `🚗 [Segundo 4-15]: Muestra tomas de la Toyota Hilux, Fortuner, Prado, Minivan Hiace, Coaster y Camión Cisterna. "En VIP CAR Huancayo tenemos desde Coasters de 33 pasajeros hasta camiones cisterna con equipamiento minero homologado."\n\n📍 [Segundo 16-25]: "Recuerda que todas las reservas se hacen con 24 a 48 horas de anticipación. Entregamos en Urb. La Merced o en el Aeropuerto de Jauja. Aceptamos facturas BCP/BBVA y tarjetas."`;
+        body = `🚗 [Segundo 4-15]: Muestra tomas de la Toyota Hilux, Fortuner, Prado, Minivan Hiace, Coaster, Furgón cerrado y Camión Cisterna. "En VIP CAR Huancayo tenemos desde Coasters de 33 pasajeros hasta camiones de carga de 5 toneladas y cisternas con equipamiento minero homologado."\n\n📍 [Segundo 16-25]: "Recuerda que todas las reservas se hacen con 24 a 48 horas de anticipación. Entregamos en Urb. La Merced o en el Aeropuerto de Jauja. Aceptamos facturas BCP/BBVA y tarjetas."`;
         cta = `👉 [Segundo 26-30]: "Toca el enlace de nuestro perfil o escribe al WhatsApp 999 461 414 para cotizar tu unidad."`;
         tags = `#Huancayo #AlquilerDeAutosHuancayo #ToyotaHilux #Fortuner #ToyotaHiace #Coaster #CamionCisterna #VipCarHuancayo`;
       } else if (marketingPlatform === 'facebook') {
