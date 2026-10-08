@@ -1246,9 +1246,3 @@ export default function App() {
           </div>
         </div>
       </footer>
-
-      {/* VERCEL ANALYTICS INTEGRADO */}
-      <Analytics />
-    </div>
-  );
-}
