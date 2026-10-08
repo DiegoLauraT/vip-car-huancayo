@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { 
   Car, Shield, CheckCircle2, BarChart3, 
   DollarSign, Users, AlertCircle, Plus, Send, Phone, 
   MapPin, Calendar, Compass, Key, Lock, LogOut, Check, 
   Clock, Mail, Award, Sparkles, Bot, Copy, RefreshCw, Lightbulb,
   CreditCard, Wallet, Building2, AlertTriangle, Truck, Bus, 
-  Fuel, Gauge, Settings, Wind
+  Gauge, Settings, Wind
 } from 'lucide-react';
 
 export default function App() {
@@ -17,7 +18,7 @@ export default function App() {
   const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [authError, setAuthError] = useState('');
 
-  // Cotizador Interactivo de Rent a Car
+  // Cotizador Interactivo
   const [selectedVehicleId, setSelectedVehicleId] = useState('hilux');
   const [rentalDays, setRentalDays] = useState(3);
   const [withDriver, setWithDriver] = useState(false);
@@ -183,10 +184,10 @@ export default function App() {
   const calculateTotal = () => {
     let base = selectedVehicle.baseRate;
     if (miningKit && (selectedVehicle.category === 'camionetas' || selectedVehicle.category === 'camiones')) {
-      base += 30; // Kit minero, pértiga, circulina
+      base += 30;
     }
     if (withDriver) {
-      base += 130; // Chofer calificado
+      base += 130;
     }
     return base * rentalDays;
   };
@@ -237,7 +238,7 @@ export default function App() {
       } else if (marketingPlatform === 'facebook') {
         title = `📢 Copy Publicitario para Facebook & Instagram Ads: Campaña B2B y Minería`;
         hook = `🚜 FLOTA PESADA, BUSES Y CAMIONETAS 4X4 PARA EMPRESAS Y CONTRATISTAS EN JUNÍN`;
-        body = `¿Tu proyecto minero o vial en la sierra central necesita vehículos confiables?\n\nEn VIP CAR RENTAL HUANCAYO ponemos a tu disposición:\n• Toyota Hilux 4x4, Fortuner y Land Cruiser Prado con estándar minero (pértiga y jaula).\n• Vans Toyota Hiace (17p), Minibuses Coaster (33p) y Ómnibus (46p).\n• Camiones furgón cerrado de 5TN y Camiones Cisterna.\n\n✅ Monitoreo Satelital GPS 24/7 y Seguro Total.\n✅ Conductores con examen psicosensométrico y manejo defensivo.\n⚠️ Reserva tu unidad con mínimo 24 a 48 horas de anticipación para habilitación técnica.`;
+        body = `¿Tu proyecto minero o vial en la sierra central necesita vehículos confiables?\n\nEn VIP CAR HUANCAYO ponemos a tu disposición:\n• Toyota Hilux 4x4, Fortuner y Land Cruiser Prado con estándar minero (pértiga y jaula).\n• Vans Toyota Hiace (17p), Minibuses Coaster (33p) y Ómnibus (46p).\n• Camiones furgón cerrado de 5TN y Camiones Cisterna.\n\n✅ Monitoreo Satelital GPS 24/7 y Seguro Total.\n✅ Conductores con examen psicosensométrico y manejo defensivo.\n⚠️ Reserva tu unidad con mínimo 24 a 48 horas de anticipación para habilitación técnica.`;
         cta = `📲 ¡Cotiza hoy mismo al WhatsApp 999 461 414 o visita nuestras oficinas en Av. Manuel Traverso 597, Urb. La Merced!`;
         tags = `Segmentación recomendada: Huancayo, Concepción, Tarma, Chanchamayo, La Oroya, Pasco.`;
       } else if (marketingPlatform === 'whatsapp') {
@@ -290,7 +291,7 @@ export default function App() {
         </div>
       </div>
 
-      {/* NAVBAR PRINCIPAL EN ROJO Y BLANCO */}
+      {/* NAVBAR PRINCIPAL: LOGO LIMPIO VIP CAR (SIN 'RENTAL') */}
       <header className="sticky top-0 z-50 backdrop-blur-md bg-neutral-950/90 border-b border-red-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => setView('landing')}>
@@ -298,12 +299,11 @@ export default function App() {
               <Car className="w-7 h-7 stroke-[2.5]" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-2xl font-black tracking-tight text-white">VIP CAR</span>
-                <span className="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded bg-white text-red-700">RENTAL</span>
-              </div>
+              <span className="text-2xl font-black tracking-tight text-white block leading-tight">
+                VIP CAR
+              </span>
               <span className="text-[11px] block text-neutral-300 font-medium tracking-wide">
-                Camionetas 4x4, Buses, Vans & Camiones Huancayo
+                Huancayo • Junín
               </span>
             </div>
           </div>
@@ -398,7 +398,7 @@ export default function App() {
             </div>
           </section>
 
-          {/* CATÁLOGO DE FLOTA CON PESTAÑAS (FOTOS Y ESPECIFICACIONES) */}
+          {/* CATÁLOGO DE FLOTA CON PESTAÑAS */}
           <section id="flota" className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-10">
               <span className="text-xs font-bold text-red-500 uppercase tracking-widest">Catálogo Oficial VIP CAR Huancayo</span>
@@ -436,7 +436,6 @@ export default function App() {
                   className="bg-neutral-900/80 border border-neutral-800 rounded-3xl overflow-hidden hover:border-red-600/60 transition group flex flex-col justify-between"
                 >
                   <div>
-                    {/* Imagen del vehículo */}
                     <div className="relative h-52 overflow-hidden bg-neutral-950">
                       <img 
                         src={car.image} 
@@ -449,14 +448,12 @@ export default function App() {
                       </span>
                     </div>
 
-                    {/* Contenido de la tarjeta */}
                     <div className="p-6">
                       <h3 className="text-xl font-bold text-white mb-2">{car.name}</h3>
                       <p className="text-xs text-neutral-400 leading-relaxed mb-5">
                         {car.description}
                       </p>
 
-                      {/* Especificaciones Técnicas (Igual que en la imagen de la web) */}
                       <div className="grid grid-cols-2 gap-3 py-3 border-y border-neutral-800 text-xs">
                         <div className="flex items-center gap-2 text-neutral-300">
                           <Users className="w-4 h-4 text-red-500" />
@@ -478,7 +475,6 @@ export default function App() {
                     </div>
                   </div>
 
-                  {/* Botón de Cotizar */}
                   <div className="p-6 pt-0 flex items-center justify-between">
                     <div>
                       <span className="text-[11px] text-neutral-400 block">Tarifa estimada:</span>
@@ -573,7 +569,6 @@ export default function App() {
                   1. Vehículo Seleccionado: <span className="text-white font-black">{selectedVehicle.name}</span>
                 </label>
                 
-                {/* Selector rápido de vehículos de la flota */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 mb-6">
                   {vehiclesCatalog.map((v) => (
                     <button
@@ -1237,11 +1232,11 @@ export default function App() {
         </div>
       )}
 
-      {/* FOOTER */}
+      {/* FOOTER: MARCA LIMPIA VIP CAR HUANCAYO */}
       <footer className="border-t border-neutral-900 bg-neutral-950 py-10 mt-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-white tracking-wider">VIP CAR RENTAL HUANCAYO</span>
+            <span className="font-bold text-white tracking-wider">VIP CAR HUANCAYO</span>
             <span className="text-xs text-neutral-500">| © 2026 Todos los derechos reservados</span>
           </div>
           <div className="flex flex-wrap items-center gap-5 text-xs text-neutral-400">
@@ -1251,6 +1246,9 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* VERCEL ANALYTICS INTEGRADO */}
+      <Analytics />
     </div>
   );
 }
