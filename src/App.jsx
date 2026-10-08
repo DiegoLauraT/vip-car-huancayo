@@ -36,7 +36,7 @@ export default function App() {
   });
   const [bookingSuccess, setBookingSuccess] = useState(false);
 
-  // FLOTA OFICIAL COMPLETA DE VIP CAR HUANCAYO
+  // FLOTA OFICIAL COMPLETA DE VIP CAR HUANCAYO CON IMÁGENES CORREGIDAS
   const vehiclesCatalog = [
     // CAMIONETAS Y SUVS
     {
@@ -130,8 +130,8 @@ export default function App() {
       traction: '4x2',
       ac: 'A/C',
       baseRate: 480,
-      image: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=800&q=80',
-      description: 'Baranda alta acondicionada para cuadrillas de campo en sectores viales y agrícolas.',
+      image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80',
+      description: 'Camión con carrocería de baranda acondicionada para cuadrillas de campo en sectores viales y agrícolas.',
       tag: 'Operativo'
     },
     {
@@ -156,8 +156,8 @@ export default function App() {
       traction: '4x2 / 6x4',
       ac: 'A/C',
       baseRate: 750,
-      image: 'https://images.unsplash.com/photo-1508614589041-895b88991e3e?auto=format&fit=crop&w=800&q=80',
-      description: 'Abastecimiento para proyectos de construcción, carreteras y campamentos en la sierra.',
+      image: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=800&q=80',
+      description: 'Abastecimiento de agua potable o combustible para proyectos de construcción, carreteras y campamentos en la sierra.',
       tag: 'Especializado'
     },
   ];
@@ -1246,3 +1246,9 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* VERCEL ANALYTICS INTEGRADO */}
+      <Analytics />
+    </div>
+  );
+}
